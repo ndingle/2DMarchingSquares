@@ -37,17 +37,19 @@ public class LandscapeGenerator : MonoBehaviour {
         //Start her up
         GenerateVoxels();
         CreateMesh();
-		//OptimiseVertices();
-        //UpdateMesh();
 
     }
 
     void GenerateVoxels() {
 
-        //TODO: Remove this 
-        for(var x = 1; x < width-1; x++) {
+        //First test with perlin noise
+        //TODO: Implement it
 
-            for (var y = 1; y < height-1; y++)
+        //TODO: Remove this 
+        for (var x = 1; x < width - 1; x++)
+        {
+
+            for (var y = 1; y < height - 1; y++)
             {
 
                 //Set it to something random
@@ -56,7 +58,6 @@ public class LandscapeGenerator : MonoBehaviour {
             }
 
         }
-        //END TODO
 
     }
 
@@ -73,43 +74,15 @@ public class LandscapeGenerator : MonoBehaviour {
                 //CreateCase(caseNumber, x, y);
 				if(caseNumber > 0) {
 
-					GameObject newCase = (GameObject)Instantiate((GameObject)Resources.Load (caseNumber.ToString().Trim()), Vector3.zero, Quaternion.identity);
-					Vector3 pos = newCase.transform.position;
-					pos.x = x * 0.5f;
-					pos.y = y * 0.5f;
-					newCase.transform.position = pos;
+					GameObject newCase = (GameObject)Instantiate((GameObject)Resources.Load (caseNumber.ToString()), 
+                                                                 new Vector3(x * 0.5f, y * 0.5f), 
+                                                                 Quaternion.identity);
 
 				}
 
             }
 
         }
-
-    }
-
-	void OptimiseVertices() {
-
-		for (int x = 0; x < vertices.Count; x++){
-			Vector3 curVert = vertices[x]; // get vertex [i]
-			// compare it to the next vertices:
-			for (int y = x+1; y < vertices.Count; y++){
-				// if any one inside limit distance...
-				if (Vector3.Distance(curVert, vertices[y]) < 0.0001f){
-					vertices[y] = curVert; // make it equal to vertex [i]
-				}
-			}
-		}
-
-	}
-
-    void UpdateMesh() {
-
-        //Setup the mesh
-        mesh.Clear();
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.Optimize();
-        mesh.RecalculateNormals();
 
     }
 
@@ -123,335 +96,6 @@ public class LandscapeGenerator : MonoBehaviour {
 
         //Return the final case
         return caseNumber;
-
-    }
-
-    void AddTriangle() {
-
-        triangles.Add(3 * triangleCount);
-        triangles.Add(1 + (3 * triangleCount));
-        triangles.Add(2 + (3 * triangleCount));
-
-        triangleCount++;
-
-    }
-
-    void CreateCase(int caseNumber, 
-                    int x, 
-                    int y) { 
-
-        //Create the mesh
-        switch(caseNumber) {
-
-            case 1:
-                GenCase1(x, y);
-                break;
-
-            case 2:
-                GenCase2(x, y);
-                break;
-
-            case 3:
-                GenCase3(x, y);
-                break;
-
-            case 4:
-                GenCase4(x, y);
-                break;
-
-            case 5:
-                GenCase5(x, y);
-                break;
-
-            case 6:
-                GenCase6(x, y);
-                break;
-
-            case 7:
-                GenCase7(x, y);
-                break;
-
-            case 8:
-                GenCase8(x, y);
-                break;
-
-            case 9:
-                GenCase9(x, y);
-                break;
-
-            case 10:
-                GenCase10(x, y);
-                break;
-
-            case 11:
-                GenCase11(x, y);
-                break;
-
-            case 12:
-                GenCase12(x, y);
-                break;
-
-            case 13:
-                GenCase13(x, y);
-                break;
-
-            case 14:
-                GenCase14(x, y);
-                break;
-
-            case 15:
-                GenCase15(x, y);
-                break;
-        }
-
-    }
-
-    void GenCase1(int x, int y) {
-
-        //Vertices for case 1
-        vertices.Add(new Vector3(x, y));
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x, y - 0.5f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase2(int x, int y) {
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase3(int x, int y) {
-
-        vertices.Add(new Vector3(x, y));
-        vertices.Add(new Vector3(x + 1f, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x, y - 0.5f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase4(int x, int y) {
-
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 1f, y - 1f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase5(int x, int y) {
-
-        GenCase1(x, y);
-
-        vertices.Add(new Vector3(x, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-         
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        
-        AddTriangle();
-
-        GenCase4(x, y);
-
-    }
-
-    void GenCase6(int x, int y) {
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y));
-        vertices.Add(new Vector3(x + 1f, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y - 1f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-         
-        AddTriangle();
-
-    }
-
-    void GenCase7(int x, int y) {
-
-        GenCase1(x, y);
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x, y - 0.5f));
-
-        AddTriangle();
-
-        GenCase2(x, y);
-
-        GenCase4(x, y);
-
-    }
-
-    void GenCase8(int x, int y) {
-
-        vertices.Add(new Vector3(x, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x, y - 1f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase9(int x, int y) {
-
-        vertices.Add(new Vector3(x, y));
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x, y));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x, y - 1f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase10(int x, int y) {
-
-        GenCase2(x, y);
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x, y - 0.5f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-
-        AddTriangle();
-
-        GenCase8(x, y);
-
-    }
-
-    void GenCase11(int x, int y) {
-
-        GenCase1(x, y);
-
-        GenCase2(x, y);
-        
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x, y - 0.5f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x, y - 0.5f));
-
-        AddTriangle();
-
-        GenCase8(x, y);
-
-    }
-
-    void GenCase12(int x, int y) {
-
-        vertices.Add(new Vector3(x, y - 0.5f));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x, y - 1f));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 1f, y - 1f));
-
-        AddTriangle();
-
-    }
-
-    void GenCase13(int x, int y) {
-
-        GenCase1(x, y);
-
-        GenCase4(x, y);
-
-        vertices.Add(new Vector3(x, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-        vertices.Add(new Vector3(x + 0.5f, y));
-
-        AddTriangle();
-
-        GenCase8(x, y);
-
-    }
-
-    void GenCase14(int x, int y) {
-
-        GenCase2(x, y);
-
-        GenCase4(x, y);
-
-        vertices.Add(new Vector3(x, y - 0.5f));
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x + 1f, y - 0.5f));
-        vertices.Add(new Vector3(x, y - 0.5f));
-        vertices.Add(new Vector3(x + 0.5f, y));
-
-        AddTriangle();
-
-        GenCase8(x, y);
-
-    }
-
-    void GenCase15(int x, int y) {
-
-        vertices.Add(new Vector3(x, y));
-        vertices.Add(new Vector3(x + 1f, y));
-        vertices.Add(new Vector3(x, y - 1f));
-
-        AddTriangle();
-
-        vertices.Add(new Vector3(x, y - 1f));
-        vertices.Add(new Vector3(x + 1f, y));
-        vertices.Add(new Vector3(x + 1f, y - 1f));
-
-        AddTriangle();
 
     }
 
